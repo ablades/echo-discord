@@ -1,4 +1,5 @@
 import discord
+from discord.ext import commands
 import asyncio
 import requests
 import os
@@ -9,32 +10,23 @@ load_dotenv()
 API_ENDPOINT = 'https://discordapp.com/api/v6'
 CLIENT_ID = os.getenv("CLIENT_ID")
 CLIENT_SECRET = os.getenv("CLIENT_SECRET")
+BOT_TOKEN = os.getenv("BOT_TOKEN")
 
-client = discord.Client()
+bot = commands.Bot(command_prefix='$')
 
-def get_token():
-  data = {
-    'grant_type': 'client_credentials',
-    'scope': 'identify connections'
-  }
-  headers = {
-    'Content-Type': 'application/x-www-form-urlencoded'
-  }
-  r = requests.post('%s/oauth2/token' % API_ENDPOINT, data=data, headers=headers, auth=(CLIENT_ID, CLIENT_SECRET))
-  r.raise_for_status()
-  print(r.json())
-  return r.json()
 
-@client.event
-async def login_user():
-    pass
+#fetch arguments from commands
+@bot.command()
+async def fetch(ctx, arg):
+    await ctx.send(arg)
+    args_list = ctx.args
+    print(f"The argument: {args_list} and {arg}")
 
-@client.event
-async def on_ready(self):
-    print(self.user.name)
+@bot.event
+async def on_ready():
+    print(f"{bot.user} has connected to {bot.guilds}")
 
-    print(client.servers)
 
 if __name__ == "__main__":
-    get_token()
+    bot.run(BOT_TOKEN)
          
