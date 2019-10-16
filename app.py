@@ -7,18 +7,34 @@ import json
 from dotenv import load_dotenv
 load_dotenv()
 
-API_ENDPOINT = 'https://discordapp.com/api/v6'
-CLIENT_ID = os.getenv("CLIENT_ID")
-CLIENT_SECRET = os.getenv("CLIENT_SECRET")
+DISCORD_ID = os.getenv("DISCORD_ID")
+DISCORD_SECRET = os.getenv("DISCORD_SECRET")
 BOT_TOKEN = os.getenv("BOT_TOKEN")
+TWITCH_ID = os.getenv("TWITCH_ID")
+TWITCH_SECRET = os.getenv("TWITCH_SECRET")
 
 bot = commands.Bot(command_prefix='$')
+
+async def twitch_fetch():
+
+    headers = {
+        'Client-ID': TWITCH_ID,
+    }
+
+    params = (
+        ('game_id', '33214'),
+    )
+
+    response = requests.get('https://api.twitch.tv/helix/streams', headers=headers, params=params)
+
+    print(response.json())
 
 
 #fetch arguments from commands
 @bot.command()
 async def fetch(ctx, arg):
     await ctx.send(arg)
+    await twitch_fetch()
     args_list = ctx.args
     print(f"The argument: {args_list} and {arg}")
 
