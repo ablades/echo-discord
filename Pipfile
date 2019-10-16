@@ -7,6 +7,8 @@ verify_ssl = true
 
 [packages]
 discord-py = {extras = ["voice"],version = "*"}
+requests = "*"
+python-dotenv = "*"
 
 [requires]
 python_version = "3.7"
