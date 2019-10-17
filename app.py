@@ -46,9 +46,11 @@ async def twitch_fetch(game_name):
 @bot.command()
 async def fetch(ctx, arg):
     await ctx.send("TWITCH RESULTS")
-    await ctx.send(await twitch_fetch(arg))
+    test = await twitch_fetch(arg)
+    print(test)
     await ctx.send("MIXERS RESULTS")
-    await ctx.send(await mixer_fetch(arg))
+    test2 = await mixer_fetch(arg)
+    print(test2)
 
 @bot.event
 async def on_ready():
