@@ -39,18 +39,46 @@ async def twitch_fetch(game_name):
 
     response = requests.get('https://api.twitch.tv/kraken/search/streams', headers=headers, params=params)
 
-    return response.json()
+    if response.status_code == '404':
+        print("Query not found")
+
+    twitch_streams = json.loads(response.content)['streams']
+
+    return twitch_streams
+"""
+ 'streams':[ 
+      { 
+         '_id':35997734672,
+         'game':'Diablo III: Reaper of Souls',
+         'broadcast_platform':'live',
+         'community_id':'',
+         'community_ids':[  ],
+         'viewers':961,
+         'video_height':1080,
+         'average_fps':30,
+         'delay':0,
+         'created_at':'2019-10-17T20:54:55Z',
+         'is_playlist':False,
+         'stream_type':'live',
+         'preview':{  },
+         'channel':{  }
+      },
+
+"""
 
 
 #fetch arguments from commands
 @bot.command()
 async def fetch(ctx, arg):
     await ctx.send("TWITCH RESULTS")
-    test = await twitch_fetch(arg)
-    print(test)
+    twitch_streams = await twitch_fetch(arg)
     await ctx.send("MIXERS RESULTS")
-    test2 = await mixer_fetch(arg)
-    print(test2)
+    mixer_json = await mixer_fetch(arg)
+
+    print(twitch_streams[0]['game'])
+    
+    for stream in twitch_streams:
+        await ctx.send(stream['channel']['url'])
 
 @bot.event
 async def on_ready():
